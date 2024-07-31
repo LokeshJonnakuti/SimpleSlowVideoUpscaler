@@ -16,6 +16,7 @@ import shutil
 import uuid
 import json
 import threading
+from security import safe_command
 
 # Constants
 USE_TORCH_COMPILE = False
@@ -236,7 +237,7 @@ def extract_frames(video_path, output_folder):
         '-vf', 'fps=30',
         f'{output_folder}/frame_%06d.png'
     ]
-    subprocess.run(command, check=True)
+    safe_command.run(subprocess.run, command, check=True)
 
 def frames_to_video(input_folder, output_path, fps, original_video_path):
     # First, create the video from frames without audio
@@ -249,7 +250,7 @@ def frames_to_video(input_folder, output_path, fps, original_video_path):
         '-pix_fmt', 'yuv420p',
         temp_output_path
     ]
-    subprocess.run(video_command, check=True)
+    safe_command.run(subprocess.run, video_command, check=True)
 
     # Then, copy the audio from the original video and add it to the new video
     final_command = [
@@ -263,7 +264,7 @@ def frames_to_video(input_folder, output_path, fps, original_video_path):
         '-shortest',
         output_path
     ]
-    subprocess.run(final_command, check=True)
+    safe_command.run(subprocess.run, final_command, check=True)
 
     # Remove the temporary file
     os.remove(temp_output_path)
