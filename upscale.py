@@ -1,5 +1,4 @@
 import os
-import requests
 import time
 import io
 import torch
@@ -16,6 +15,7 @@ import shutil
 import uuid
 import json
 import threading
+from security import safe_requests
 
 # Constants
 USE_TORCH_COMPILE = False
@@ -63,7 +63,7 @@ def download_file(url, folder_path, filename):
     if os.path.isfile(file_path):
         print(f"File already exists: {file_path}")
     else:
-        response = requests.get(url, stream=True)
+        response = safe_requests.get(url, stream=True)
         if response.status_code == 200:
             with open(file_path, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=1024):

@@ -13,3 +13,4 @@ peft
 gradio
 pillow
 gradio-imageslider
+security==1.3.1
